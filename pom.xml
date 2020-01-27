@@ -64,7 +64,7 @@
 	  <!--<pdf.version>2.0.6</pdf.version>-->
 	  <!--<poi.version>3.16</poi.version>-->
 	  <solr.version>7.4.0</solr.version>
-	  <tika.version>1.20</tika.version>
+	  <tika.version>1.23</tika.version>
 	  <unirest.version>1.4.9</unirest.version>
   </properties>
 
