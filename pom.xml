@@ -56,7 +56,7 @@
 	  <commons-beanutils.version>1.9.3</commons-beanutils.version>
 	  <commons-io.version>2.6</commons-io.version>
 	  <guava.version>25.1-jre</guava.version>
-	  <jackson.version>2.9.4</jackson.version>
+	  <jackson.version>2.9.10.1</jackson.version>
 	  <jsoup.version>1.11.3</jsoup.version>
 	  <junit.version>4.12</junit.version>
 	  <!--<language-detector.version>0.6</language-detector.version>-->
