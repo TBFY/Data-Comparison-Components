@@ -1,27 +1,5 @@
-# Compiled class file
-*.class
-target
-src/test/docker/data
-*secure
-
-# Corpora
-input/
-
-# IDE files
-.idea
-*.iml
-
-# Private Files
-src/test/resources/credentials.properties
-
 # Log file
 *.log
-
-# BlueJ files
-*.ctxt
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
 
 # Package Files #
 *.jar
