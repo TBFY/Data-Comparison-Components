@@ -1,4 +1,0 @@
-- public procurement notices from the EU and beyond: https://ted.europa.eu/
-- 22 languages
-- Access to last daily editions of procurement notices as bulk download in XML format. 
-- FTP access login and password: "guest" for both fields: ftp://guest:guest@ted.europa.eu/daily-packages/
