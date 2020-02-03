@@ -35,8 +35,15 @@ And index them into [SOLR](http://lucene.apache.org/solr/) to perform complex qu
 
 ## Environment 
 
-Changing the `oid` reference
+Changing the `oid` reference of Tender
 XXXX = 'ocdkls-dsnndfds53-tgg6yh'
+
+## Docker Requirements
+
+It is necessary that the Docker machine meets the following requirements:
+https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html#_set_vm_max_map_count_to_at_least_262144
+
+
 
 ## Contributing
 Please take a look at our [contributing](https://github.com/TBFY/general/blob/master/guides/how-to-contribute.md) guidelines if you're interested in helping!

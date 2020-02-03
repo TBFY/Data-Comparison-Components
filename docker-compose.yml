@@ -1,0 +1,33 @@
+version: '2.2'
+services:
+  siren-01:
+    image: sirensolutions/siren-platform:latest 
+    container_name: siren01
+    environment:
+      SERVER_NAME: siren
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - 9220:9220
+      - 5606:5606
+    networks:
+      - net-siren
+  python-01:
+    build: .
+    container_name: python01
+    environment:
+      IDTENDER: ocds-0c46vo-0009-DN379620-1_DN379620-1
+      LIMITE: 1000
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    networks:
+      - net-siren
+    volumes:
+      - ./python:/python
+networks:
+  net-siren:
+    driver: bridge
