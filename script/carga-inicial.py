@@ -2,16 +2,16 @@ import time
 import os
 from elasticsearch import Elasticsearch
 from datetime import datetime
-# import urllib2
-# import json 
+import urllib2
+import json 
 
 URL_ELASTICSEARCH = "https://localhost:9220"
 es_user = 'sirenadmin'
 es_pass = 'password'
 es_index = 'tender'
 
-# IDTENDER = "ocds-0c46vo-0009-DN379620-1_DN379620-1"
-# LIMITE = "10"
+IDTENDER = "ocds-0c46vo-0001-00057255-55b4-4d67-81bb-3d959b476302_ocds-b5fd17-ac2cf6de-240e-4012-9b4c-17a41903f3e1-black001-dn391433-52516609"
+LIMITE = "100"
 
 # Habrimos el registro de trazas de los logs
 f = open("salida.log", "w")
@@ -29,13 +29,25 @@ f.write("     - Password: ElasticSearch: " + es_pass + "\n")
 # Borramos el indice si existe
 #es.indices.delete(index=es_index, ignore=[400, 404])
 
-#with urllib.request.urlopen("http://tbfy.librairy.linkeddata.es/search-api/documents/" + IDTENDER + "/items?size=" + LIMITE) as url_search:
+#with urllib2.request.urlopen("http://tbfy.librairy.linkeddata.es/search-api/documents/" + IDTENDER + "/items?size=" + LIMITE) as url_search:
 #  json_data_search_api = json.loads(url_search.read().decode())
 #
-#for rows in json_data_search_api:
-#  print("Recorremos id: " + rows['id'])
-#  with urllib.request.urlopen("http://tbfy.librairy.linkeddata.es/kg-api/tender/" + rows['id']) as url_kg:
-#    json_data_search_api = json.loads(url_kg.read().decode())
+print ("Consultamos la URL: " + "http://tbfy.librairy.linkeddata.es/search-api/documents/" + IDTENDER + "/items?size=" + LIMITE)
+req = urllib2.Request("http://tbfy.librairy.linkeddata.es/search-api/documents/" + IDTENDER + "/items?size=" + LIMITE)
+response = urllib2.urlopen(req)
+json_data_search_api = json.loads(response.read().decode('utf8', 'ignore'))
+
+for rows in json_data_search_api:
+  print("+ Recorremos id: " + rows['id'])
+  req = urllib2.Request("http://tbfy.librairy.linkeddata.es/kg-api/tender/" + rows['id'])
+  response = urllib2.urlopen(req)
+  json_data_kg_api = json.loads(response.read().decode('utf8', 'ignore'))
+  if json_data_kg_api.get('id'):
+    print("  - title id: " + json_data_kg_api['title'])
+    print("  - status id: " + json_data_kg_api['status'])
+  else:
+    print ("No se ha recuperado datos de kg-api para este tender")
+
 
   
 
