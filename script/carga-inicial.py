@@ -2,8 +2,8 @@ import time
 import os
 from elasticsearch import Elasticsearch
 from datetime import datetime
-import urllib.request
-import json 
+# import urllib2
+# import json 
 
 URL_ELASTICSEARCH = "https://localhost:9220"
 es_user = 'sirenadmin'
