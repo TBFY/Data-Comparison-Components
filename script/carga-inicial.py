@@ -4,22 +4,21 @@ from elasticsearch import Elasticsearch
 from datetime import datetime
 import urllib.request, json 
 
-PROTOCOLO_ELASTICSEARCH = 'https://'
 URL_ELASTICSEARCH = "https://localhost:9220"
 es_user = 'sirenadmin'
 es_pass = 'password'
 es_index = 'tender'
 
-IDTENDER = "ocds-0c46vo-0009-DN379620-1_DN379620-1"
-LIMITE = "10"
+# IDTENDER = "ocds-0c46vo-0009-DN379620-1_DN379620-1"
+# LIMITE = "10"
 
 # Habrimos el registro de trazas de los logs
-f = open("salida.log", "w")
+f = open("/oesia/salida.log", "w")
 f.write(" + Inicio del proceso de carga de datos" + "\n")
 f.write(" + Variables de Entorno:" + "\n")
 f.write("   - ID del Tender a consultar: " + str(os.environ.get('IDTENDER')) + "\n")
 f.write("   - LIMITE del numero de consultas a realizar: " + str(os.environ.get('LIMITE')) + "\n")
-f.write("   - URL de ElasticSearch: " + PROTOCOLO_ELASTICSEARCH + es_user + ':' + es_pass + '@' + URL_ELASTICSEARCH + "\n")
+f.write("   - URL de ElasticSearch: " + URL_ELASTICSEARCH + "\n")
 f.write("     - Usuario: ElasticSearch: " + es_user + "\n")
 f.write("     - Password: ElasticSearch: " + es_pass + "\n")
 
@@ -29,13 +28,13 @@ f.write("     - Password: ElasticSearch: " + es_pass + "\n")
 # Borramos el indice si existe
 #es.indices.delete(index=es_index, ignore=[400, 404])
 
-with urllib.request.urlopen("http://tbfy.librairy.linkeddata.es/search-api/documents/" + IDTENDER + "/items?size=" + LIMITE) as url_search:
-  json_data_search_api = json.loads(url_search.read().decode())
-
-for rows in json_data_search_api:
-  print("Recorremos id: " + rows['id'])
-  with urllib.request.urlopen("http://tbfy.librairy.linkeddata.es/kg-api/tender/" + rows['id']) as url_kg:
-    json_data_search_api = json.loads(url_kg.read().decode())
+#with urllib.request.urlopen("http://tbfy.librairy.linkeddata.es/search-api/documents/" + IDTENDER + "/items?size=" + LIMITE) as url_search:
+#  json_data_search_api = json.loads(url_search.read().decode())
+#
+#for rows in json_data_search_api:
+#  print("Recorremos id: " + rows['id'])
+#  with urllib.request.urlopen("http://tbfy.librairy.linkeddata.es/kg-api/tender/" + rows['id']) as url_kg:
+#    json_data_search_api = json.loads(url_kg.read().decode())
 
   
 

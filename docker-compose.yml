@@ -1,7 +1,7 @@
 version: '2.2'
 services:
   siren:
-    image: sirensolutions/siren-platform:latest 
+    image: ODCT:latest
     container_name: siren-container
     environment:
       SERVER_NAME: siren
