@@ -13,7 +13,7 @@ es_index = 'tender'
 # LIMITE = "10"
 
 # Habrimos el registro de trazas de los logs
-f = open("/oesia/salida.log", "w")
+f = open("salida.log", "w")
 f.write(" + Inicio del proceso de carga de datos" + "\n")
 f.write(" + Variables de Entorno:" + "\n")
 f.write("   - ID del Tender a consultar: " + str(os.environ.get('IDTENDER')) + "\n")
