@@ -1,16 +1,15 @@
 <p align="center"><img width=50% src="https://github.com/TBFY/general/blob/master/figures/tbfy-logo.png"></p>
-<p align="center"><img width=40% src="https://github.com/TBFY/harvester/blob/master/logo.png"></p>
+<p align="center"><img width=40% src="https://github.com/TBFY/Data-Comparison-Components/blob/master/logo.png"></p>
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-![Java](https://img.shields.io/badge/java-v1.8+-blue.svg)
-![Maven](https://img.shields.io/badge/maven-v3.0+-blue.svg)
-[![Build Status](https://travis-ci.org/TBFY/harvester.svg?branch=master)](https://travis-ci.org/TBFY/harvester)
-[![Release Status](https://jitci.com/gh/TBFY/harvester/svg)](https://jitci.com/gh/TBFY/harvester)
-[![GitHub Issues](https://img.shields.io/github/issues/TBFY/harvester.svg)](https://github.com/TBFY/harvester/issues)
+[![Build Status](https://travis-ci.org/TBFY/harvester.svg?branch=master)](https://travis-ci.org/TBFY/Data-Comparison-Components)
+[![Release Status](https://jitci.com/gh/TBFY/harvester/svg)](https://jitci.com/gh/TBFY/Data-Comparison-Components)
+[![GitHub Issues](https://img.shields.io/github/issues/TBFY/harvester.svg)](https://github.com/TBFY/Data-Comparison-Components/issues)
 [![License](https://img.shields.io/badge/license-Apache2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
+## Info
 
-
+This Repository is included in the works of [copin-compra-publica-inclusive](https://github.com/TBFY/copin-compra-publica-inclusive)
 
 ## Basic Overview
 
@@ -27,38 +26,24 @@ And index them into [SOLR](http://lucene.apache.org/solr/) to perform complex qu
 1. Clone this repo
 
 	```
-	git clone https://github.com/TBFY/harvester.git
+	git clone https://github.com/TBFY/Data-Comparison-Components.git
 	```
-1. Move into `src/test/docker` directory.
-1. Run Solr and Banana by: `docker-compose up -d`
+1. Modify the `docker-compose.yml` file to adjust the filtering parameters
+1. Run Siren.io by: `docker-compose up -d`
 1. You should be able to monitor the progress by: `docker-compose logs -f`
-1. A Solr Admin site should be available at: [http://localhost:8983/solr](http://localhost:8983/solr)
-1. Rename the configuration file: `src/test/resources/credentials.properties.sample` to `src/test/resources/credentials.properties` (*if you have credentials, update its content*)
-1. Download and extract TED articles from [ftp://guest:guest@ted.europa.eu/daily-packages/](ftp://guest:guest@ted.europa.eu/daily-packages/) and save them at: `input/ted`
-1. Move into base directory and run our harvester by: `./test TEDHarvester`
-1. A dashboard with results should be available at: [http://localhost:8983/solr/banana](http://localhost:8983/solr/banana)
+1. A siren.io Admin site should be available at: [http://localhost:5606/](http://localhost:5606/)
+
+## Environment 
+
+Changing the `oid` reference of Tender
+XXXX = 'ocdkls-dsnndfds53-tgg6yh'
+
+## Docker Requirements
+
+It is necessary that the Docker machine meets the following requirements:
+https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html#_set_vm_max_map_count_to_at_least_262144
 
 
-Take a look at all our harvesters here:  `src/test/java/harvest/`.
-
-## Lastest Stable Release [![](https://jitpack.io/v/TBFY/harvester.svg)](https://jitpack.io/#TBFY/harvester)
-Step 1. Add the JitPack repository to your build file
-```xml
-        <repositories>
-		<repository>
-		    <id>jitpack.io</id>
-		    <url>https://jitpack.io</url>
-		</repository>
-	</repositories>
-```
-Step 2. Add the dependency
-```xml
-        <dependency>
-	    <groupId>com.github.TBFY</groupId>
-	    <artifactId>harvester</artifactId>
-	    <version>last-stable-release-version</version>
-	</dependency>
-```
 
 ## Contributing
 Please take a look at our [contributing](https://github.com/TBFY/general/blob/master/guides/how-to-contribute.md) guidelines if you're interested in helping!

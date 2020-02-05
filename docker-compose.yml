@@ -1,0 +1,16 @@
+version: '2.2'
+services:
+  siren:
+    image: ODCT:latest
+    container_name: siren-container
+    environment:
+      SERVER_NAME: siren
+      IDTENDER: ocds-0c46vo-0009-DN379620-1_DN379620-1
+      LIMITE: 1000
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - 9220:9220
+      - 5606:5606
