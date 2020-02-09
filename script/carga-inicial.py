@@ -4,6 +4,7 @@ from elasticsearch import Elasticsearch
 from datetime import datetime
 import urllib2
 import json 
+import base64
 
 URL_ELASTICSEARCH = "https://localhost:9220"
 es_user = 'sirenadmin'
@@ -13,31 +14,44 @@ list_of_id = []
 list_of_id_void = []
 
 
-try: IDTENDER
-except NameError: IDTENDER = 'ocds-0c46vo-0001-00057255-55b4-4d67-81bb-3d959b476302_ocds-b5fd17-ac2cf6de-240e-4012-9b4c-17a41903f3e1-black001-dn391433-52516609'
+# Establecemos los parametros den entrada en caso de que no se pasen, como en las pruebas
+if str(os.environ.get('LIMITE')) == "None":
+	IDTENDER = 'ocds-0c46vo-0001-00057255-55b4-4d67-81bb-3d959b476302_ocds-b5fd17-ac2cf6de-240e-4012-9b4c-17a41903f3e1-black001-dn391433-52516609'
+else:
+	IDTENDER = str(os.environ.get('LIMITE'))
 
-try: LIMITE
-except NameError: LIMITE = '400'
+if str(os.environ.get('LIMITE')) == "None":
+	LIMITE = '400'
+else:
+	LIMITE = str(os.environ.get('LIMITE'))
 
-try: TOTAL_DATOS
-except NameError: TOTAL_DATOS = '100'
+if str(os.environ.get('TOTAL_DATOS')) == "None":
+	TOTAL_DATOS = '10'
+else:
+	TOTAL_DATOS = str(os.environ.get('TOTAL_DATOS'))
+
+
+
 
 # Habrimos el registro de trazas de los logs
 f = open("salida.log", "w")
 f.write(" + Inicio del proceso de carga de datos" + "\n")
 f.write(" + Variables de Entorno:" + "\n")
-f.write("   - ID del Tender a consultar: " + str(os.environ.get('IDTENDER')) + "\n")
-f.write("   - LIMITE del numero de consultas a realizar: " + str(os.environ.get('LIMITE')) + "\n")
+f.write("   - ID del Tender a consultar: " + IDTENDER + "\n")
+f.write("   - LIMITE del numero de consultas a realizar en search-api: " + LIMITE + "\n")
+f.write("   - TOTAL_DATOS para almacenar de tender en elasticsearch: " + LIMITE + "\n")
 f.write("   - URL de ElasticSearch: " + URL_ELASTICSEARCH + "\n")
 f.write("     - Usuario: ElasticSearch: " + es_user + "\n")
 f.write("     - Password: ElasticSearch: " + es_pass + "\n")
 
-# Creamos la conexion con el ElasticSearch de Siren
 es = Elasticsearch(URL_ELASTICSEARCH, http_auth=(es_user,es_pass), verify_certs=False)
+res_json = es.cluster.health(wait_for_status='yellow', request_timeout=100)
+# https://localhost:9220/_cluster/health?wait_for_status=yellow&timeout=100s
 
 # Borramos el indice si existe
 es.indices.delete(index=es_index, ignore=[400, 404])
 
+# Funcion que realiza un busqueda de Tender similares he inserta en elasticsearch los datos
 def iteracion (id_tender):
 	global list_of_id
 	global list_of_id_void
@@ -104,31 +118,6 @@ f.write("\n")
 f.write("Numero de elementos insertados: "+ str(len(list_of_id)) + "\n")
 f.write("Numero de elementos omitidos por no tener informacion el kn-api: "+ str(len(list_of_id_void)) + "\n")
 f.write("\n")
-
-#doc1 = {
-#	'oid': '234243',
-#	'tender': 'Uno',
-#	'timestamp': datetime.now().strftime('%Y-%m-%dT%H:%M:%S.%fZ')
-#	}
-#
-## res = es.index(index=es_index, doc_type='id', id=1, body=doc1)
-#
-#res = es.index(index=es_index, body=doc1)
-#print(res['result'])
-
-
-
-# wait for yellow status
-#for _ in range(1 if nowait else 100):
-#    try:
-#        client.cluster.health(wait_for_status='yellow')
-#    except ConnectionError:
-#        time.sleep(.1)
-#else:
-#    # timeout
-#    raise SkipTest("Elasticsearch failed to start.")
-		
-
 
 f.write(" + Fin del proceso de carga de datos" + "\n")
 
