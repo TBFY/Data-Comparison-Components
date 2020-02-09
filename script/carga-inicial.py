@@ -18,7 +18,7 @@ list_of_id_void = []
 if str(os.environ.get('IDTENDER')) == "None":
 	IDTENDER = 'ocds-0c46vo-0001-00057255-55b4-4d67-81bb-3d959b476302_ocds-b5fd17-ac2cf6de-240e-4012-9b4c-17a41903f3e1-black001-dn391433-52516609'
 else:
-	IDTENDER = str(os.environ.get('LIMITE'))
+	IDTENDER = str(os.environ.get('IDTENDER'))
 
 if str(os.environ.get('LIMITE')) == "None":
 	LIMITE = '400'
