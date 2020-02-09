@@ -5,6 +5,7 @@ from datetime import datetime
 import urllib2
 import json 
 import base64
+import ssl
 
 URL_ELASTICSEARCH = "https://localhost:9220"
 es_user = 'sirenadmin'
@@ -44,9 +45,19 @@ f.write("   - URL de ElasticSearch: " + URL_ELASTICSEARCH + "\n")
 f.write("     - Usuario: ElasticSearch: " + es_user + "\n")
 f.write("     - Password: ElasticSearch: " + es_pass + "\n")
 
-es = Elasticsearch(URL_ELASTICSEARCH, http_auth=(es_user,es_pass), verify_certs=False)
-res_json = es.cluster.health(wait_for_status='yellow', request_timeout=100)
+es = Elasticsearch(URL_ELASTICSEARCH, http_auth=(es_user,es_pass), ca_certs=False, verify_certs=False, ssl_show_warn=False)
+#res_json = es.cluster.health(wait_for_status='yellow', request_timeout=10)
 # https://localhost:9220/_cluster/health?wait_for_status=yellow&timeout=100s
+
+while True:
+	try:
+		res_json = es.cluster.health(wait_for_status='yellow', request_timeout=10)
+	except:
+		print ("---- Elastecsearch no esta respondiendo, esperamos 10 segundos")
+		time.sleep(10)
+		continue
+	print("---- Elasticsearch OK")
+	break
 
 # Borramos el indice si existe
 es.indices.delete(index=es_index, ignore=[400, 404])
@@ -108,7 +119,16 @@ doc1 = {
 	'description': json_data_kg_api['description'],
 	'status': json_data_kg_api['status']
 	}
-res = es.index(index=es_index, body=doc1)
+	
+while True:
+	try:
+		res = es.index(index=es_index, body=doc1)
+	except:
+		print ("---- Fallo al insertar registro en ElasticSearch, esperamos 10 segundo")
+		time.sleep(10)
+		continue
+	break
+
 list_of_id.append(IDTENDER)
 
 iteracion(IDTENDER)
