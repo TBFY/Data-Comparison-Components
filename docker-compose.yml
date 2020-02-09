@@ -5,8 +5,9 @@ services:
     container_name: siren-container
     environment:
       SERVER_NAME: siren
-      IDTENDER: ocds-0c46vo-0009-DN379620-1_DN379620-1
-      LIMITE: 1000
+      IDTENDER: ocds-0c46vo-0001-00057255-55b4-4d67-81bb-3d959b476302_ocds-b5fd17-ac2cf6de-240e-4012-9b4c-17a41903f3e1-black001-dn391433-52516609
+      LIMITE: 400
+      TOTAL_DATOS: 100
     ulimits:
       memlock:
         soft: -1
