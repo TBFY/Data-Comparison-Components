@@ -74,8 +74,13 @@ def iteracion (id_tender):
 		response = urllib2.urlopen(req)
 		json_data_search_api = json.loads(response.read().decode('utf8', 'ignore'))
 		for rows in json_data_search_api:
+			insertar_indice_search (id_tender, rows['id'])
+			req_r = urllib2.Request("http://tbfy.librairy.linkeddata.es/search-api/documents/" + rows['id'] + "/items?source=tender&size=10")
+			response_r = urllib2.urlopen(req_r)
+			json_data_search_api_r = json.loads(response_r.read().decode('utf8', 'ignore'))
+				for rows_r in json_data_search_api_r:
+					insertar_indice_search (rows['id'], rows_r['id'])
 			if rows['id'] not in list_of_id and rows['id'] not in list_of_id_void and len(list_of_id) <= int(TOTAL_DATOS):
-				insertar_indice_search (id_tender, rows['id'])
 				inserta_tender (rows['id'])
 	else:
 		print ("No se puede recuperar el Tender: " + id_tender + " por lo que no realizamos mas busquedas sobre este Tender")
