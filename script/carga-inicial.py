@@ -78,8 +78,8 @@ def iteracion (id_tender):
 			req_r = urllib2.Request("http://tbfy.librairy.linkeddata.es/search-api/documents/" + rows['id'] + "/items?source=tender&size=10")
 			response_r = urllib2.urlopen(req_r)
 			json_data_search_api_r = json.loads(response_r.read().decode('utf8', 'ignore'))
-				for rows_r in json_data_search_api_r:
-					insertar_indice_search (rows['id'], rows_r['id'])
+			for rows_r in json_data_search_api_r:
+				insertar_indice_search (rows['id'], rows_r['id'])
 			if rows['id'] not in list_of_id and rows['id'] not in list_of_id_void and len(list_of_id) <= int(TOTAL_DATOS):
 				inserta_tender (rows['id'])
 	else:
