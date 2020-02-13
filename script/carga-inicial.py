@@ -21,13 +21,13 @@ list_of_id_void = []
 
 
 # Establecemos los parametros den entrada en caso de que no se pasen, como en las pruebas
-if str(os.environ.get('IDTENDER')) == "None":
-	IDTENDER = 'ocds-0c46vo-0001-8233113a-28c7-4626-9c41-2f3cbfd7d1e6_ocds-b5fd17-df1f7eb0-89c0-4564-a474-ede9131fc40f-sch---7234'
+if str(os.environ.get('IDTENDER_SEARCH')) == "None":
+	IDTENDER_SEARCH = 'ocds-0c46vo-0001-8233113a-28c7-4626-9c41-2f3cbfd7d1e6_ocds-b5fd17-df1f7eb0-89c0-4564-a474-ede9131fc40f-sch---7234'
 else:
-	IDTENDER = str(os.environ.get('IDTENDER'))
+	IDTENDER_SEARCH = str(os.environ.get('IDTENDER_SEARCH'))
 
 if str(os.environ.get('TOTAL_DATOS_TENDER_SEARCH')) == "None":
-	TOTAL_DATOS_TENDER_SEARCH = '100'
+	TOTAL_DATOS_TENDER_SEARCH = '50'
 else:
 	TOTAL_DATOS_TENDER_SEARCH = str(os.environ.get('TOTAL_DATOS_TENDER_SEARCH'))
 
@@ -41,12 +41,16 @@ if str(os.environ.get('TOTAL_DATOS_AWARD')) == "None":
 else:
 	TOTAL_DATOS_AWARD = str(os.environ.get('TOTAL_DATOS_AWARD'))
 
+if str(os.environ.get('TOTAL_DATOS_CONTRACTING_PROCESS')) == "None":
+	TOTAL_DATOS_CONTRACTING_PROCESS = '100'
+else:
+	TOTAL_DATOS_CONTRACTING_PROCESS = str(os.environ.get('TOTAL_DATOS_CONTRACTING_PROCESS'))
 
 # Habrimos el registro de trazas de los logs
 f = open("salida.log", "w")
 f.write(" + Inicio del proceso de carga de datos" + "\n")
 f.write(" + Variables de Entorno:" + "\n")
-f.write("   - ID del Tender a consultar: " + IDTENDER + "\n")
+f.write("   - ID del Tender a consultar: " + IDTENDER_SEARCH + "\n")
 f.write("   - TOTAL_DATOS_TENDER_SEARCH del numero de consultas a realizar en search-api: " + TOTAL_DATOS_TENDER_SEARCH + "\n")
 f.write("   - TOTAL_DATOS_TENDER para almacenar de tender en elasticsearch: " + TOTAL_DATOS_TENDER + "\n")
 f.write("   - URL de ElasticSearch: " + URL_ELASTICSEARCH + "\n")
@@ -331,7 +335,7 @@ def inserta_tender_document (id):
 # main
 ##################################
 
-iteracion_search(IDTENDER)
+iteracion_search(IDTENDER_SEARCH)
 
 iteracion_award (TOTAL_DATOS_AWARD)
 

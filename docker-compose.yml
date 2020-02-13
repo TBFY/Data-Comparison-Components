@@ -5,9 +5,11 @@ services:
     container_name: siren-container
     environment:
       SERVER_NAME: siren
-      IDTENDER: ocds-0c46vo-0001-8233113a-28c7-4626-9c41-2f3cbfd7d1e6_ocds-b5fd17-df1f7eb0-89c0-4564-a474-ede9131fc40f-sch---7234
-      TOTAL_DATOS_SEARCH: 500
-      TOTAL_DATOS: 400
+      IDTENDER_SEARCH: ocds-0c46vo-0001-8233113a-28c7-4626-9c41-2f3cbfd7d1e6_ocds-b5fd17-df1f7eb0-89c0-4564-a474-ede9131fc40f-sch---7234
+      TOTAL_DATOS_TENDER_SEARCH: 50
+      TOTAL_DATOS_TENDER: 400
+      TOTAL_DATOS_AWARD: 400
+      TOTAL_DATOS_CONTRACTING_PROCESS: 400
     ulimits:
       memlock:
         soft: -1
