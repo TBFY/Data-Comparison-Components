@@ -10,6 +10,7 @@ import base64
 import ssl
 
 URL_ELASTICSEARCH = "https://localhost:9220"
+# URL_ELASTICSEARCH = "https://elastsiren.oesia.com"
 es_user = 'sirenadmin'
 es_pass = 'password'
 es_index_kg_api_tender = 'tender'
@@ -187,8 +188,9 @@ def inserta_award (id):
 		doc['contractPeriodEndDate'] = None
 	
 	if json_data_kg_api.get('value'):
-		doc['awardValue'] = json_data_kg_api.get('value').get("amount")
-		doc['awardCurrency'] = json_data_kg_api.get('value').get("currency")
+		if json_data_kg_api.get('value').get("amount"):
+			doc['awardValue'] = float(json_data_kg_api.get('value').get("amount"))
+			doc['awardCurrency'] = json_data_kg_api.get('value').get("currency")
 	else:
 		doc['awardValue'] = None
 		doc['awardCurrency'] = None
@@ -266,13 +268,11 @@ def inserta_award_supplier (id):
 			doc['contactName'] = rows.get('contactPoint').get('name')
 			doc['contactEmail'] = rows.get('contactPoint').get('email')
 			doc['contactTelephone'] = rows.get('contactPoint').get('telephone')
-			doc['contactTelephone'] = rows.get('contactPoint').get('telephone')
 			doc['contactURL'] = rows.get('contactPoint').get('URL')
 			doc['contactFax'] = rows.get('contactPoint').get('fax')
 		else:
 			doc['contactName'] = None
 			doc['contactEmail'] = None
-			doc['contactTelephone'] = None
 			doc['contactTelephone'] = None
 			doc['contactURL'] = None
 			doc['contactFax'] = None
@@ -469,10 +469,12 @@ def inserta_tender (id):
 		}
 
 	if json_data_kg_api.get('value'):
-		doc['minEstimatedValueAmount'] = json_data_kg_api.get('value').get('minEstimatedAmount')
-		doc['minEstimatedValueCurrency'] = json_data_kg_api.get('value').get('minEstimatedCurrency')
-		doc['maxEstimatedValueAmount'] = json_data_kg_api.get('value').get('maxEstimatedAmount')
-		doc['maxEstimatedValueCurrency'] = json_data_kg_api.get('value').get('maxEstimatedCurrency')
+		if json_data_kg_api.get('value').get('minEstimatedAmount'):
+			doc['minEstimatedValueAmount'] = float(json_data_kg_api.get('value').get('minEstimatedAmount'))
+			doc['minEstimatedValueCurrency'] = json_data_kg_api.get('value').get('minEstimatedCurrency')
+		if json_data_kg_api.get('value').get('maxEstimatedAmount'):
+			doc['maxEstimatedValueAmount'] = float(json_data_kg_api.get('value').get('maxEstimatedAmount'))
+			doc['maxEstimatedValueCurrency'] = json_data_kg_api.get('value').get('maxEstimatedCurrency')
 	else:
 		doc['minEstimatedValueAmount'] = None
 		doc['minEstimatedValueCurrency'] = None
