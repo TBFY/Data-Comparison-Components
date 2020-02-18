@@ -32,22 +32,22 @@ else:
 	IDTENDER_SEARCH = str(os.environ.get('IDTENDER_SEARCH'))
 
 if str(os.environ.get('TOTAL_DATOS_TENDER_SEARCH')) == "None":
-	TOTAL_DATOS_TENDER_SEARCH = '5'
+	TOTAL_DATOS_TENDER_SEARCH = '20'
 else:
 	TOTAL_DATOS_TENDER_SEARCH = str(os.environ.get('TOTAL_DATOS_TENDER_SEARCH'))
 
 if str(os.environ.get('TOTAL_DATOS_TENDER')) == "None":
-	TOTAL_DATOS_TENDER = '10'
+	TOTAL_DATOS_TENDER = '200'
 else:
 	TOTAL_DATOS_TENDER = str(os.environ.get('TOTAL_DATOS_TENDER'))
 
 if str(os.environ.get('TOTAL_DATOS_AWARD')) == "None":
-	TOTAL_DATOS_AWARD = '100'
+	TOTAL_DATOS_AWARD = '200'
 else:
 	TOTAL_DATOS_AWARD = str(os.environ.get('TOTAL_DATOS_AWARD'))
 
 if str(os.environ.get('TOTAL_DATOS_CONTRACTING_PROCESS')) == "None":
-	TOTAL_DATOS_CONTRACTING_PROCESS = '100'
+	TOTAL_DATOS_CONTRACTING_PROCESS = '200'
 else:
 	TOTAL_DATOS_CONTRACTING_PROCESS = str(os.environ.get('TOTAL_DATOS_CONTRACTING_PROCESS'))
 
