@@ -7,7 +7,7 @@
 
 ## Info
 
-This Repository is included in the works of [copin-compra-publica-inclusive](https://github.com/TBFY/copin-compra-publica-inclusive)
+This repository contains the development done by Oesía for Task “2.5 Data comparison components”
 
 ## Basic Overview
 
