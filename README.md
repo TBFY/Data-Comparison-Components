@@ -34,7 +34,8 @@ Download articles and legal documents from public procurement sources:
 1. You should be able to monitor the progress by: `docker-compose logs -f`
 1. Run de exec `docker-compose exec -T siren sh init.sh` to launch the data upload
 1. For admin site should be available at: [http://localhost:5606/](http://localhost:5606/)
-
+- User: sirenadmin
+- Password: password
 ## Docker Requirements
 
 It is necessary that the Docker machine meets the following requirements:
