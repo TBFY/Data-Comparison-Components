@@ -9,12 +9,18 @@
 
 This repository contains the development done by Oesía for Task “2.5 Data comparison components”
 
-## Basic Overview
-
 Download articles and legal documents from public procurement sources:
 - Tender and contract data of European government bodies from [OpenOpps](https://openopps.com) via [API](http://theybuyforyou.eu/openopps-api/) or Amazon-S3 bucket (*credentials are required*)
 - Legislative texts via [JRC-Acquis](https://ec.europa.eu/jrc/en/language-technologies/jrc-acquis) dataset.
 - Public procurement notices via [TED](https://ted.europa.eu/) dataset.
+
+## Basic Overview
+
+The tool is used to analyze the information extracted from the KG through the 2 project APIs designed to work with the Knowledge Graph: [KG core api](https://github.com/TBFY/knowledge-graph-API) and [search api](https://github.com/TBFY/search-API).
+
+The core API basically brings bidding information while the Api search searches, from an OCID, for documents containing similar descriptions ("description" field) regardless of the language.
+
+This comparison tool analyses the bidding and award data that is extracted from an initial load. To perform this initial load, you must indicate the number of tenders and awards that you want to search for the KG. And, to use the api search, you are asked for the ID of the document you want to compare. All this parameterization is done together at the beginning.
 
 ## Quick Start
 
@@ -24,7 +30,7 @@ Download articles and legal documents from public procurement sources:
 	```
 	git clone https://github.com/TBFY/Data-Comparison-Components.git
 	```
-1. Modify the `docker-compose.yml` file to adjust the filtering parameters
+1. Modify the `docker-compose.yml` file to adjust the volume of data to be extracted from the KG-API and the search-API on initial tool loading
 - IDTENDER_SEARCH: id in search-api for similar tender
 - TOTAL_DATOS_TENDER_SEARCH: Maximum number of records to retrieve from search-api
 - TOTAL_DATOS_TENDER: Maximum data to recover from kg-api for Tender
@@ -44,6 +50,10 @@ https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html#_set
 	```
 	vm.max_map_count=262144
 	```
+## Lastest Stable Release
+Lastest stable release can be found here:
+
+https://hub.docker.com/repository/docker/tbfy/odc-tool
 
 ## Contributing
 Please take a look at our [contributing](https://github.com/TBFY/general/blob/master/guides/how-to-contribute.md) guidelines if you're interested in helping!
