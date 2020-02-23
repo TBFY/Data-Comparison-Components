@@ -34,11 +34,18 @@ This comparison tool analyses the bidding and award data that is extracted from 
 - IDTENDER_SEARCH: id in search-api for similar tender
 - TOTAL_DATOS_TENDER_SEARCH: Maximum number of records to retrieve from search-api
 - TOTAL_DATOS_TENDER: Maximum data to recover from kg-api for Tender
+- STATUS_DATOS_TENDER: Status of the tender (planning, planned, active, canceled, unsuccessful, complete, withdrawn), if left on the side, the filter is not applied
+- TITLE_DATOS_TENDER: A word to filter, if left empty the filter is not applied
+- DESCRIPTION_DATOS_TENDER: A word to filter, if left empty the filter is not applied
 - TOTAL_DATOS_AWARD: Maximum data to recover from kg-api for Award
+- STATUS_DATOS_AWARD: Status of the award (pending, active, canceled, unsuccessful), if left on the side, the filter is not applied
+- TITLE_DATOS_AWARD: A word to filter, if left empty the filter is not applied
+- DESCRIPTION_DATOS_AWARD: A word to filter, if left empty the filter is not applied
 - TOTAL_DATOS_CONTRACTING_PROCESS: Maximum data to recover from kg-api for Contracting Process
 1. Run the container Docker by: `docker-compose up -d`
 1. You should be able to monitor the progress by: `docker-compose logs -f`
 1. Run de exec `docker-compose exec -T siren sh init.sh` to launch the data upload
+In the final result of the data loading there will be more data than the limits indicated, this is due to the fact that the related Tenders and Awards are also loaded.
 1. For admin site should be available at: [http://localhost:5606/](http://localhost:5606/)
 - User: sirenadmin
 - Password: password
