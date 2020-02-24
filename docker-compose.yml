@@ -12,10 +12,9 @@ services:
       TITLE_DATOS_TENDER: 
       DESCRIPTION_DATOS_TENDER: 
       TOTAL_DATOS_AWARD: 1000
-      STATUS_DATOS_AWARD: active
+      STATUS_DATOS_AWARD: 
       TITLE_DATOS_AWARD: 
-      DESCRIPTION_DATOS_AWARD: 
-      TOTAL_DATOS_CONTRACTING_PROCESS: 1000
+      DESCRIPTION_DATOS_AWARD: madrid
     ulimits:
       memlock:
         soft: -1
