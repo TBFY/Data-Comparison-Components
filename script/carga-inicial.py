@@ -10,7 +10,7 @@ import base64
 import ssl
 
 URL_ELASTICSEARCH = "https://localhost:9220"
-# URL_ELASTICSEARCH = "https://elastsiren.oesia.com"
+#URL_ELASTICSEARCH = "https://elastsiren.oesia.com"
 es_user = 'sirenadmin'
 es_pass = 'password'
 es_index_kg_api_tender = 'tender'
