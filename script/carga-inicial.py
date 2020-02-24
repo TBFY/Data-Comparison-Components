@@ -10,7 +10,7 @@ import base64
 import ssl
 
 URL_ELASTICSEARCH = "https://localhost:9220"
-# URL_ELASTICSEARCH = "https://elastsiren.oesia.com"
+#URL_ELASTICSEARCH = "https://elastsiren.oesia.com"
 es_user = 'sirenadmin'
 es_pass = 'password'
 es_index_kg_api_tender = 'tender'
@@ -632,11 +632,10 @@ def inserta_tender_document (id):
 # inserta_contracting_process ('ocds-0c46vo-0001-1399e0bb-4af4-4793-8f70-b850e4e8a191')
 # inserta_contracting_process ('ocds-0c46vo-0001-0b1a2380-10ac-45ea-82dc-519e24ee8dcf')
 
-iteracion_search(IDTENDER_SEARCH)
 #iteracion_contracting_process (TOTAL_DATOS_CONTRACTING_PROCESS)
 iteracion_tender (TOTAL_DATOS_TENDER)
 iteracion_award (TOTAL_DATOS_AWARD)
-
+iteracion_search(IDTENDER_SEARCH)
 
 
 #inserta_tender(IDTENDER_SEARCH)

@@ -44,8 +44,9 @@ This comparison tool analyses the bidding and award data that is extracted from 
 - TOTAL_DATOS_CONTRACTING_PROCESS: Maximum data to recover from kg-api for Contracting Process
 1. Run the container Docker by: `docker-compose up -d`
 1. You should be able to monitor the progress by: `docker-compose logs -f`
-1. Run de exec `docker-compose exec -T siren sh init.sh` to launch the data upload
-In the final result of the data loading there will be more data than the limits indicated, this is due to the fact that the related Tenders and Awards are also loaded.
+1. To stop the docker container, the command  `docker-compose logs -f`
+	If you want to perform a new data load, you will stop, modify the docker-compose.yml and start the container, this will restart the whole process.
+	In the final result of the data loading there will be more data than the limits indicated, this is due to the fact that the related Tenders and Awards are also loaded.
 1. For admin site should be available at: [http://localhost:5606/](http://localhost:5606/)
 - User: sirenadmin
 - Password: password
