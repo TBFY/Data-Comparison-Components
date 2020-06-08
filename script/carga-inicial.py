@@ -209,11 +209,11 @@ def iteracion_award (total_award):
 	global STATUS_DATOS_AWARD
 	global TITLE_DATOS_AWARD
 	url_text = "http://tbfy.librairy.linkeddata.es/kg-api/award?size=" + total_award
-	if STATUS_DATOS_AWARD <> "" and STATUS_DATOS_AWARD <> None:
+	if STATUS_DATOS_AWARD != "" and STATUS_DATOS_AWARD != None:
 		url_text = url_text + "&status=" + STATUS_DATOS_AWARD 
-	if TITLE_DATOS_AWARD <> "" and TITLE_DATOS_AWARD <> None:
+	if TITLE_DATOS_AWARD != "" and TITLE_DATOS_AWARD != None:
 		url_text = url_text + "&title=" + TITLE_DATOS_AWARD
-	if DESCRIPTION_DATOS_AWARD <> "" and DESCRIPTION_DATOS_AWARD <> None:
+	if DESCRIPTION_DATOS_AWARD != "" and DESCRIPTION_DATOS_AWARD != None:
 		url_text = url_text + "&description=" + DESCRIPTION_DATOS_AWARD 
 	registrolog("- Buscamos en el KG-API de Award: " + url_text)
 	req = urllib2.Request(url_text)
@@ -238,44 +238,48 @@ def inserta_award (id):
 	else:
 		registrolog("  - No se ha recuperado datos de kg-api " + id + " award")
 		return False
-	doc = {
-		'timestamp': datetime.now().strftime('%Y-%m-%dT%H:%M:%S.%fZ'),
-		'id': id,
-		'title': json_data_kg_api.get('title'),
-		'description': json_data_kg_api.get('description'),
-		'date': convierte_fecha(json_data_kg_api.get('date')),
-		'status': json_data_kg_api.get('status')
-		}
-	if json_data_kg_api.get('contractPeriod'):
-		doc['contractPeriodStartDate'] = convierte_fecha(json_data_kg_api.get('contractPeriod').get("startDate"))
-		doc['contractPeriodEndDate'] = convierte_fecha(json_data_kg_api.get('contractPeriod').get("endDate"))
-	else:
-		doc['contractPeriodStartDate'] = None
-		doc['contractPeriodEndDate'] = None
-	
-	if json_data_kg_api.get('value'):
-		if json_data_kg_api.get('value').get("amount"):
-			doc['awardValue'] = float(json_data_kg_api.get('value').get("amount"))
-			doc['awardCurrency'] = json_data_kg_api.get('value').get("currency")
-	else:
-		doc['awardValue'] = None
-		doc['awardCurrency'] = None
-	
-	if json_data_kg_api.get('tender'):
-		doc['tenderId'] = json_data_kg_api.get('tender').get("id")
-	else:
-		doc['tenderId'] = None
 	try:
-		res = es.index(index=es_index_kg_api_award, id=id, body=doc)
-	except elasticsearch.ElasticsearchException as es1:
-		registrolog ("---- Fallo al insertar registro en \"" + es_index_kg_api_award + "\" de ElasticSearch, esperamos 10 segundo")
-		registrolog ("---- " + es_index_kg_api_award + ": " + id)
-		registrolog ("doc: " + str(doc))
-		registrolog ("Excepcion: " + str(es1))
-		time.sleep(10)
-	registrolog ("+ " + es_index_kg_api_award + ": " + id)
-	inserta_award_document (id)
-	inserta_award_supplier (id)
+		doc = {
+			'timestamp': datetime.now().strftime('%Y-%m-%dT%H:%M:%S.%fZ'),
+			'id': id,
+			'title': json_data_kg_api.get('title'),
+			'description': json_data_kg_api.get('description'),
+			'date': convierte_fecha(json_data_kg_api.get('date')),
+			'status': json_data_kg_api.get('status')
+			}
+		if json_data_kg_api.get('contractPeriod'):
+			doc['contractPeriodStartDate'] = convierte_fecha(json_data_kg_api.get('contractPeriod').get("startDate"))
+			doc['contractPeriodEndDate'] = convierte_fecha(json_data_kg_api.get('contractPeriod').get("endDate"))
+		else:
+			doc['contractPeriodStartDate'] = None
+			doc['contractPeriodEndDate'] = None
+		
+		if json_data_kg_api.get('value'):
+			if json_data_kg_api.get('value').get("amount"):
+				doc['awardValue'] = float(json_data_kg_api.get('value').get("amount"))
+				doc['awardCurrency'] = json_data_kg_api.get('value').get("currency")
+		else:
+			doc['awardValue'] = None
+			doc['awardCurrency'] = None
+		
+		if json_data_kg_api.get('tender'):
+			doc['tenderId'] = json_data_kg_api.get('tender').get("id")
+		else:
+			doc['tenderId'] = None
+		try:
+			res = es.index(index=es_index_kg_api_award, id=id, body=doc)
+		except elasticsearch.ElasticsearchException as es1:
+			registrolog ("---- Fallo al insertar registro en \"" + es_index_kg_api_award + "\" de ElasticSearch, esperamos 10 segundo")
+			registrolog ("---- " + es_index_kg_api_award + ": " + id)
+			registrolog ("doc: " + str(doc))
+			registrolog ("Excepcion: " + str(es1))
+			time.sleep(10)
+		registrolog ("+ " + es_index_kg_api_award + ": " + id)
+		inserta_award_document (id)
+		inserta_award_supplier (id)
+	except:
+		registrolog("  - Se ha producido un error trantando los datos del item recuperado datos de kg-api")
+
 	return True
 
 
@@ -322,47 +326,51 @@ def inserta_award_supplier (id):
 		return False
 	json_data_kg_api = json.loads(response.read().decode('utf8', 'ignore'))
 	for rows in json_data_kg_api:
-		doc = {
-			'timestamp': datetime.now().strftime('%Y-%m-%dT%H:%M:%S.%fZ'),
-			'id_award_source': id,
-			'id': rows.get('id'),
-			'legalname': rows.get('legalname'),
-			'jursidiction': rows.get('jursidiction')
-			}
-
-		if rows.get('contactPoint'):
-			doc['contactName'] = rows.get('contactPoint').get('name')
-			doc['contactEmail'] = rows.get('contactPoint').get('email')
-			doc['contactTelephone'] = rows.get('contactPoint').get('telephone')
-			doc['contactURL'] = rows.get('contactPoint').get('URL')
-			doc['contactFax'] = rows.get('contactPoint').get('fax')
-		else:
-			doc['contactName'] = None
-			doc['contactEmail'] = None
-			doc['contactTelephone'] = None
-			doc['contactURL'] = None
-			doc['contactFax'] = None
-
-		if rows.get('address'):
-			doc['street'] = rows.get('address').get('street')
-			doc['postalCode'] = rows.get('address').get('postalCode')
-			doc['locality'] = rows.get('address').get('locality')
-			doc['country'] = rows.get('address').get('country')
-		else:
-			doc['street'] = None
-			doc['postalCode'] = None
-			doc['locality'] = None
-			doc['country'] = None
-
 		try:
-			res = es.index(index=es_index_kg_api_award_supplier, id=id, body=doc)
-		except elasticsearch.ElasticsearchException as es1:
-			registrolog ("---- Fallo al insertar registro en \"" + es_index_kg_api_award_supplier + "\" de ElasticSearch, esperamos 10 segundo")
-			registrolog ("---- " + es_index_kg_api_award_supplier + ": " + id)
-			registrolog ("doc: " + str(doc))
-			registrolog ("Excepcion: " + str(es1))
-			time.sleep(10)
-		registrolog ("+-- " + es_index_kg_api_award_supplier + ": " + id)
+			doc = {
+				'timestamp': datetime.now().strftime('%Y-%m-%dT%H:%M:%S.%fZ'),
+				'id_award_source': id,
+				'id': rows.get('id'),
+				'legalname': rows.get('legalname'),
+				'jursidiction': rows.get('jursidiction')
+				}
+
+			if rows.get('contactPoint'):
+				doc['contactName'] = rows.get('contactPoint').get('name')
+				doc['contactEmail'] = rows.get('contactPoint').get('email')
+				doc['contactTelephone'] = rows.get('contactPoint').get('telephone')
+				doc['contactURL'] = rows.get('contactPoint').get('URL')
+				doc['contactFax'] = rows.get('contactPoint').get('fax')
+			else:
+				doc['contactName'] = None
+				doc['contactEmail'] = None
+				doc['contactTelephone'] = None
+				doc['contactURL'] = None
+				doc['contactFax'] = None
+
+			if rows.get('address'):
+				doc['street'] = rows.get('address').get('street')
+				doc['postalCode'] = rows.get('address').get('postalCode')
+				doc['locality'] = rows.get('address').get('locality')
+				doc['country'] = rows.get('address').get('country')
+			else:
+				doc['street'] = None
+				doc['postalCode'] = None
+				doc['locality'] = None
+				doc['country'] = None
+
+			try:
+				res = es.index(index=es_index_kg_api_award_supplier, id=id, body=doc)
+			except elasticsearch.ElasticsearchException as es1:
+				registrolog ("---- Fallo al insertar registro en \"" + es_index_kg_api_award_supplier + "\" de ElasticSearch, esperamos 10 segundo")
+				registrolog ("---- " + es_index_kg_api_award_supplier + ": " + id)
+				registrolog ("doc: " + str(doc))
+				registrolog ("Excepcion: " + str(es1))
+				time.sleep(10)
+			registrolog ("+-- " + es_index_kg_api_award_supplier + ": " + id)
+		except:
+			registrolog("  - Se ha producido un error trantando los datos del item recuperado datos de kg-api")
+
 	return True
 	
 	
@@ -397,33 +405,37 @@ def inserta_contracting_process (id):
 	else:
 		registrolog("  - No se ha recuperado datos de kg-api " + id + " contractingProcess")
 		return False
-	doc = {
-		'timestamp': datetime.now().strftime('%Y-%m-%dT%H:%M:%S.%fZ'),
-		'id': id,
-		}
-	if json_data_kg_api.get('plan'):
-		if json_data_kg_api.get('document'):
-			doc['documentId'] = json_data_kg_api.get('plan').get('document').get('id')
-			doc['documentType'] = json_data_kg_api.get('plan').get('document').get('tenderNotice')
-			doc['documentLanguage'] = json_data_kg_api.get('plan').get('document').get('language')
-			doc['documentURL'] =  json_data_kg_api.get('plan').get('document').get('URL')
-		else:
-			doc['documentId'] = None
-			doc['documentType'] = None
-			doc['documentLanguage'] = None
-			doc['documentURL'] =  None
-
 	try:
-		res = es.index(index=es_index_kg_api_contractingProcess, id=id, body=doc)
-	except elasticsearch.ElasticsearchException as es1:
-		registrolog ("---- Fallo al insertar registro en \"" + es_index_kg_api_contractingProcess + "\" de ElasticSearch, esperamos 10 segundo")
-		registrolog ("---- " + es_index_kg_api_contractingProcess + ": " + id)
-		registrolog ("doc: " + str(doc))
-		registrolog ("Excepcion: " + str(es1))
-		time.sleep(10)
-	registrolog ("+ " + es_index_kg_api_contractingProcess + ": " + id)
-	inserta_contracting_process_tender (id)
-	inserta_contracting_process_award (id)
+		doc = {
+			'timestamp': datetime.now().strftime('%Y-%m-%dT%H:%M:%S.%fZ'),
+			'id': id,
+			}
+		if json_data_kg_api.get('plan'):
+			if json_data_kg_api.get('document'):
+				doc['documentId'] = json_data_kg_api.get('plan').get('document').get('id')
+				doc['documentType'] = json_data_kg_api.get('plan').get('document').get('tenderNotice')
+				doc['documentLanguage'] = json_data_kg_api.get('plan').get('document').get('language')
+				doc['documentURL'] =  json_data_kg_api.get('plan').get('document').get('URL')
+			else:
+				doc['documentId'] = None
+				doc['documentType'] = None
+				doc['documentLanguage'] = None
+				doc['documentURL'] =  None
+
+		try:
+			res = es.index(index=es_index_kg_api_contractingProcess, id=id, body=doc)
+		except elasticsearch.ElasticsearchException as es1:
+			registrolog ("---- Fallo al insertar registro en \"" + es_index_kg_api_contractingProcess + "\" de ElasticSearch, esperamos 10 segundo")
+			registrolog ("---- " + es_index_kg_api_contractingProcess + ": " + id)
+			registrolog ("doc: " + str(doc))
+			registrolog ("Excepcion: " + str(es1))
+			time.sleep(10)
+		registrolog ("+ " + es_index_kg_api_contractingProcess + ": " + id)
+		inserta_contracting_process_tender (id)
+		inserta_contracting_process_award (id)
+	except:
+		registrolog("  - Se ha producido un error trantando los datos del item recuperado datos de kg-api")
+
 	return True
 
 
@@ -507,11 +519,11 @@ def iteracion_tender (total_tender):
 	global STATUS_DATOS_TENDER
 	global TITLE_DATOS_TENDER
 	url_text = "http://tbfy.librairy.linkeddata.es/kg-api/tender?size=" + total_tender
-	if STATUS_DATOS_TENDER <> "" and STATUS_DATOS_TENDER <> None:
+	if STATUS_DATOS_TENDER != "" and STATUS_DATOS_TENDER != None:
 		url_text = url_text + "&status=" + STATUS_DATOS_TENDER 
-	if TITLE_DATOS_TENDER <> "" and TITLE_DATOS_TENDER <> None:
+	if TITLE_DATOS_TENDER != "" and TITLE_DATOS_TENDER != None:
 		url_text = url_text + "&title=" + TITLE_DATOS_TENDER 
-	if DESCRIPTION_DATOS_TENDER <> "" and DESCRIPTION_DATOS_TENDER <> None:
+	if DESCRIPTION_DATOS_TENDER != "" and DESCRIPTION_DATOS_TENDER != None:
 		url_text = url_text + "&description=" + DESCRIPTION_DATOS_TENDER 
 	registrolog("- Buscamos en el KG-API de Tender: " + url_text)
 	req = urllib2.Request(url_text)
@@ -542,51 +554,54 @@ def inserta_tender (id):
 		registrolog("  - No se ha recuperado datos de kg-api  - Count en list_of_id: " + str(len(list_of_id_void)))
 		return False
 
-	doc = {
-		'timestamp': datetime.now().strftime('%Y-%m-%dT%H:%M:%S.%fZ'),
-		'id': id,
-		'title': json_data_kg_api.get('title'),
-		'description': json_data_kg_api.get('description'),
-		'eligibilityCriteria': json_data_kg_api.get('eligibilityCriteria'),
-		'status': json_data_kg_api.get('status')
-		}
-
-	if json_data_kg_api.get('value'):
-		if json_data_kg_api.get('value').get('minEstimatedAmount'):
-			doc['minEstimatedValueAmount'] = float(json_data_kg_api.get('value').get('minEstimatedAmount'))
-			doc['minEstimatedValueCurrency'] = json_data_kg_api.get('value').get('minEstimatedCurrency')
-		if json_data_kg_api.get('value').get('maxEstimatedAmount'):
-			doc['maxEstimatedValueAmount'] = float(json_data_kg_api.get('value').get('maxEstimatedAmount'))
-			doc['maxEstimatedValueCurrency'] = json_data_kg_api.get('value').get('maxEstimatedCurrency')
-	else:
-		doc['minEstimatedValueAmount'] = None
-		doc['minEstimatedValueCurrency'] = None
-		doc['maxEstimatedValueAmount'] = None
-		doc['maxEstimatedValueCurrency'] = None
-
-	if json_data_kg_api.get('tenderPeriod'):
-		doc['tenderPeriodStartDate'] = convierte_fecha(json_data_kg_api.get('tenderPeriod').get('StartDate'))
-		doc['tenderPeriodEndDate'] = convierte_fecha(json_data_kg_api.get('tenderPeriod').get('eEndDate'))
-	else:
-		doc['tenderPeriodStartDate'] = None
-		doc['tenderPeriodEndDate'] = None
-	
-	if json_data_kg_api.get('award'):
-		doc['awardCriteria'] = json_data_kg_api.get('award').get('criteria')
-		doc['awardCriteriaDetails'] = json_data_kg_api.get('award').get('criteriaDetails')
-	else:
-		doc['awardCriteria'] = None
-		doc['awardCriteriaDetails'] = None
 	try:
-		res = es.index(index=es_index_kg_api_tender, id=id, body=doc)
-	except elasticsearch.ElasticsearchException as es1:
-		registrolog ("---- Fallo al insertar registro en \"" + es_index_kg_api_tender + "\" de ElasticSearch, esperamos 10 segundo")
-		registrolog ("---- " + es_index_kg_api_tender + ": " + id)
-		registrolog ("doc: " + str(doc))
-		registrolog ("Excepcion: " + str(es1))
-		time.sleep(10)
-	registrolog ("+ " + es_index_kg_api_tender + ": " + id + " - list_of_id: " + str(len(list_of_id)) + " - list_of_id_void: " + str(len(list_of_id_void)))
-	inserta_tender_document (id)
+		doc = {
+			'timestamp': datetime.now().strftime('%Y-%m-%dT%H:%M:%S.%fZ'),
+			'id': id,
+			'title': json_data_kg_api.get('title'),
+			'description': json_data_kg_api.get('description'),
+			'eligibilityCriteria': json_data_kg_api.get('eligibilityCriteria'),
+			'status': json_data_kg_api.get('status')
+			}
+
+		if json_data_kg_api.get('value'):
+			if json_data_kg_api.get('value').get('minEstimatedAmount'):
+				doc['minEstimatedValueAmount'] = float(json_data_kg_api.get('value').get('minEstimatedAmount'))
+				doc['minEstimatedValueCurrency'] = json_data_kg_api.get('value').get('minEstimatedCurrency')
+			if json_data_kg_api.get('value').get('maxEstimatedAmount'):
+				doc['maxEstimatedValueAmount'] = float(json_data_kg_api.get('value').get('maxEstimatedAmount'))
+				doc['maxEstimatedValueCurrency'] = json_data_kg_api.get('value').get('maxEstimatedCurrency')
+		else:
+			doc['minEstimatedValueAmount'] = None
+			doc['minEstimatedValueCurrency'] = None
+			doc['maxEstimatedValueAmount'] = None
+			doc['maxEstimatedValueCurrency'] = None
+
+		if json_data_kg_api.get('tenderPeriod'):
+			doc['tenderPeriodStartDate'] = convierte_fecha(json_data_kg_api.get('tenderPeriod').get('StartDate'))
+			doc['tenderPeriodEndDate'] = convierte_fecha(json_data_kg_api.get('tenderPeriod').get('eEndDate'))
+		else:
+			doc['tenderPeriodStartDate'] = None
+			doc['tenderPeriodEndDate'] = None
+		
+		if json_data_kg_api.get('award'):
+			doc['awardCriteria'] = json_data_kg_api.get('award').get('criteria')
+			doc['awardCriteriaDetails'] = json_data_kg_api.get('award').get('criteriaDetails')
+		else:
+			doc['awardCriteria'] = None
+			doc['awardCriteriaDetails'] = None
+		try:
+			res = es.index(index=es_index_kg_api_tender, id=id, body=doc)
+		except elasticsearch.ElasticsearchException as es1:
+			registrolog ("---- Fallo al insertar registro en \"" + es_index_kg_api_tender + "\" de ElasticSearch, esperamos 10 segundo")
+			registrolog ("---- " + es_index_kg_api_tender + ": " + id)
+			registrolog ("doc: " + str(doc))
+			registrolog ("Excepcion: " + str(es1))
+			time.sleep(10)
+		registrolog ("+ " + es_index_kg_api_tender + ": " + id + " - list_of_id: " + str(len(list_of_id)) + " - list_of_id_void: " + str(len(list_of_id_void)))
+		inserta_tender_document (id)
+	except:
+		registrolog("  - Se ha producido un error trantando los datos del item recuperado datos de kg-api")
 	return True
 
 def inserta_tender_document (id):
